@@ -40,7 +40,7 @@ $ docker compose up -d
 # create a migration (the path is appended to the command)
 $ npm run migration:generate -- src/database/migrations/CreateUsers
 
-# apply pending migrations
+# apply pending migrations manually (the API also applies them on startup)
 $ npm run migration:run
 
 # undo the last applied migration
