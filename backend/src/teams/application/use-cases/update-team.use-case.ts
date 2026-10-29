@@ -1,20 +1,25 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TeamEntity } from '../../domain/entities/teams.entity';
 import { TeamRepository } from '../../domain/repositories/team.repository';
 import { plainToInstance } from 'class-transformer';
 import { UpdateTeamDto } from '../../presentation/dtos/update-team.dto';
+import { FindOneTeamUseCase } from './find-one-team.use-case';
 
 @Injectable()
 export class UpdateTeamUseCase {
     private readonly logger = new Logger(UpdateTeamUseCase.name);
-    constructor(private readonly teamRepository: TeamRepository) {}
+    constructor(
+        private readonly teamRepository: TeamRepository,
+        private readonly findOneTeamUseCase: FindOneTeamUseCase,
+    ) {}
 
     async execute(
         updateTeamDto: UpdateTeamDto,
         teamId: string,
     ): Promise<TeamEntity> {
         try {
-            const teamToBeUpdated = await this.findOneById(teamId);
+            const teamToBeUpdated =
+                await this.findOneTeamUseCase.findOneById(teamId);
             const teamEntityTransformed = plainToInstance(
                 TeamEntity,
                 updateTeamDto,
@@ -36,14 +41,5 @@ export class UpdateTeamUseCase {
             });
             throw error;
         }
-    }
-
-    private async findOneById(teamId: string): Promise<TeamEntity> {
-        const team = await this.teamRepository.findOneById(teamId);
-        if (!team) {
-            this.logger.error('Team not found', { teamId });
-            throw new NotFoundException(`Team ${teamId} not found`);
-        }
-        return team;
     }
 }
