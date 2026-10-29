@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { ILike, Repository, UpdateResult } from 'typeorm';
 import { TeamRepository } from '../../domain/repositories/team.repository';
 import { TeamEntity } from '../../domain/entities/teams.entity';
 import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
 import { UpdateTeamDto } from '../../presentation/dtos/update-team.dto';
+import { FindAllTeamsDto } from '../../presentation/dtos/find-all-teams.dto';
 
 @Injectable()
 export class TypeOrmTeamRepository implements TeamRepository {
@@ -29,5 +30,27 @@ export class TypeOrmTeamRepository implements TeamRepository {
 
     async findOneById(teamId: string): Promise<TeamEntity | null> {
         return await this.repository.findOne({ where: { id: teamId } });
+    }
+
+    async findAll(query: FindAllTeamsDto): Promise<{
+        teams: TeamEntity[];
+        limit: number;
+        offset: number;
+        total: number;
+    }> {
+        const { limit, offset } = query;
+        const search = query.search ? query.search.trim() : undefined;
+        const [teams, total] = await this.repository.findAndCount({
+            where: search
+                ? [
+                      { name: ILike(`%${search}%`) },
+                      { colorHex: ILike(`%${search}%`) },
+                  ]
+                : {},
+            take: limit,
+            skip: offset,
+        });
+
+        return { teams, limit, offset, total };
     }
 }

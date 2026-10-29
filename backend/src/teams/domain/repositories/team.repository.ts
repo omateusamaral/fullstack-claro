@@ -2,6 +2,7 @@ import { UpdateResult } from 'typeorm';
 import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
 import { UpdateTeamDto } from '../../presentation/dtos/update-team.dto';
 import { TeamEntity } from '../entities/teams.entity';
+import { FindAllTeamsDto } from '../../presentation/dtos/find-all-teams.dto';
 
 export abstract class TeamRepository {
     abstract create(data: CreateTeamDto): Promise<TeamEntity>;
@@ -10,4 +11,10 @@ export abstract class TeamRepository {
         data: UpdateTeamDto,
     ): Promise<TeamEntity>;
     abstract findOneById(teamId: string): Promise<TeamEntity | null>;
+    abstract findAll(query: FindAllTeamsDto): Promise<{
+        teams: TeamEntity[];
+        limit: number;
+        offset: number;
+        total: number;
+    }>;
 }
