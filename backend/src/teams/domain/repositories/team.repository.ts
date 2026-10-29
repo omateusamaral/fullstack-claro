@@ -1,4 +1,3 @@
-import { UpdateResult } from 'typeorm';
 import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
 import { UpdateTeamDto } from '../../presentation/dtos/update-team.dto';
 import { TeamEntity } from '../entities/teams.entity';
@@ -17,4 +16,5 @@ export abstract class TeamRepository {
         offset: number;
         total: number;
     }>;
+    abstract delete(teamId: string): Promise<void>;
 }

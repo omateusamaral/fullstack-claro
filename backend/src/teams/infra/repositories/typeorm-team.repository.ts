@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository, UpdateResult } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { TeamRepository } from '../../domain/repositories/team.repository';
 import { TeamEntity } from '../../domain/entities/teams.entity';
 import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
@@ -52,5 +52,9 @@ export class TypeOrmTeamRepository implements TeamRepository {
         });
 
         return { teams, limit, offset, total };
+    }
+
+    async delete(teamId: string): Promise<void> {
+        await this.repository.delete(teamId);
     }
 }

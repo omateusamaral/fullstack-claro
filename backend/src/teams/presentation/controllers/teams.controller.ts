@@ -1,7 +1,9 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
+    HttpCode,
     Param,
     ParseUUIDPipe,
     Post,
@@ -15,6 +17,7 @@ import { UpdateTeamDto } from '../dtos/update-team.dto';
 import { UpdateTeamUseCase } from '../../application/use-cases/update-team.use-case';
 import { FindAllTeamsUseCase } from '../../application/use-cases/find-all-teams.use-case';
 import { FindAllTeamsDto } from '../dtos/find-all-teams.dto';
+import { DeleteTeamUseCase } from '../../application/use-cases/delete-team.use-case';
 
 @Controller('teams')
 export class TeamsController {
@@ -22,6 +25,7 @@ export class TeamsController {
         private readonly createTeamUseCase: CreateTeamUseCase,
         private readonly updateTeamUseCase: UpdateTeamUseCase,
         private readonly findAllTeamsUseCase: FindAllTeamsUseCase,
+        private readonly deleteTeamUseCase: DeleteTeamUseCase,
     ) {}
     @Get()
     findAll(@Query() query: FindAllTeamsDto) {
@@ -38,5 +42,13 @@ export class TeamsController {
         @Param('teamId', new ParseUUIDPipe()) teamId: string,
     ): Promise<TeamEntity> {
         return this.updateTeamUseCase.execute(updateTeamDto, teamId);
+    }
+
+    @Delete(':teamId')
+    @HttpCode(204)
+    delete(
+        @Param('teamId', new ParseUUIDPipe()) teamId: string,
+    ): Promise<void> {
+        return this.deleteTeamUseCase.execute(teamId);
     }
 }

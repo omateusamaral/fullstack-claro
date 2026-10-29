@@ -7,6 +7,8 @@ import { TeamEntity } from './domain/entities/teams.entity';
 import { TypeOrmTeamRepository } from './infra/repositories/typeorm-team.repository';
 import { UpdateTeamUseCase } from './application/use-cases/update-team.use-case';
 import { FindAllTeamsUseCase } from './application/use-cases/find-all-teams.use-case';
+import { DeleteTeamUseCase } from './application/use-cases/delete-team.use-case';
+import { FindOneTeamUseCase } from './application/use-cases/find-one-team.use-case';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TeamEntity])],
@@ -15,6 +17,8 @@ import { FindAllTeamsUseCase } from './application/use-cases/find-all-teams.use-
         CreateTeamUseCase,
         UpdateTeamUseCase,
         FindAllTeamsUseCase,
+        FindOneTeamUseCase,
+        DeleteTeamUseCase,
         { provide: TeamRepository, useClass: TypeOrmTeamRepository },
     ],
 })
