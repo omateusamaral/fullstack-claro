@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
 import { TeamEntity } from '../../domain/entities/teams.entity';
 import { TeamRepository } from '../../domain/repositories/team.repository';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CreateTeamUseCase {
@@ -11,7 +11,7 @@ export class CreateTeamUseCase {
 
     async execute(createTeamDto: CreateTeamDto): Promise<TeamEntity> {
         try {
-            const teamEntityTransformed = plainToClass(
+            const teamEntityTransformed = plainToInstance(
                 TeamEntity,
                 createTeamDto,
             );
