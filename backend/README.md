@@ -38,7 +38,7 @@ from the differences between the entities and the database:
 $ docker compose up -d
 
 # create a migration (the path is appended to the command)
-$ npm run migration:generate -- src/database/migrations/CreateUsers
+$ npm run migration:generate -- src/database/migrations/CreateTeams
 
 # apply pending migrations manually (the API also applies them on startup)
 $ npm run migration:run
