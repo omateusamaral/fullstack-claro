@@ -17,7 +17,7 @@ describe('DeleteTeamUseCase', () => {
             delete: jest.fn(),
         };
         findOneTeamUseCase = new FindOneTeamUseCase(teamRepository);
-        findOneByIdMock = jest.spyOn(findOneTeamUseCase, 'findOneById');
+        findOneByIdMock = jest.spyOn(findOneTeamUseCase, 'execute');
         useCase = new DeleteTeamUseCase(teamRepository, findOneTeamUseCase);
     });
 
