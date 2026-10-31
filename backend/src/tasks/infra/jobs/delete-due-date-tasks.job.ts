@@ -3,8 +3,8 @@ import { Cron, CronExpression, CronOptions } from '@nestjs/schedule';
 import { DeleteTaskUseCase } from '../../application/use-cases/delete-task.use-case';
 
 @Injectable()
-export class CleanupTasksJob {
-    private readonly logger = new Logger(CleanupTasksJob.name);
+export class DeleteDueDateTasksJob {
+    private readonly logger = new Logger(DeleteDueDateTasksJob.name);
     constructor(private readonly deleteTaskUseCase: DeleteTaskUseCase) {}
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, {
         timeZone: 'America/Sao_Paulo',

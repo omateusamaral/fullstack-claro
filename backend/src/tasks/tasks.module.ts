@@ -10,7 +10,7 @@ import { FindOneTaskUseCase } from './application/use-cases/find-one-task.use-ca
 import { UpdateTaskUseCase } from './application/use-cases/update-task.use-case';
 import { DeleteTaskUseCase } from './application/use-cases/delete-task.use-case';
 import { FindAllTasksUseCase } from './application/use-cases/find-all-tasks.use-case';
-import { CleanupTasksJob } from './infra/jobs/clean-up-tasks.job';
+import { DeleteDueDateTasksJob } from './infra/jobs/delete-due-date-tasks.job';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -26,8 +26,9 @@ import { ScheduleModule } from '@nestjs/schedule';
         FindOneTaskUseCase,
         DeleteTaskUseCase,
         FindAllTasksUseCase,
-        CleanupTasksJob,
+        DeleteDueDateTasksJob,
         { provide: TaskRepository, useClass: TypeOrmTaskRepository },
     ],
+    exports: [FindAllTasksUseCase],
 })
 export class TasksModule {}
