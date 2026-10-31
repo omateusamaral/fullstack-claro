@@ -1,14 +1,54 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseUUIDPipe,
+    Post,
+    Put,
+} from '@nestjs/common';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { CreateTaskUseCase } from '../../application/use-cases/create-task.use-case';
 import { TaskEntity } from '../../domain/entities/tasks.entity';
+import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { UpdateTaskUseCase } from '../../application/use-cases/update-task.use-case';
+import { FindOneTaskUseCase } from '../../application/use-cases/find-one-task.use-case';
+import { DeleteTaskUseCase } from '../../application/use-cases/delete-task.use-case';
 
 @Controller('tasks')
 export class TasksController {
-    constructor(private readonly createTaskUseCase: CreateTaskUseCase) {}
+    constructor(
+        private readonly createTaskUseCase: CreateTaskUseCase,
+        private readonly updateTaskUseCase: UpdateTaskUseCase,
+        private readonly findOneTaskUseCase: FindOneTaskUseCase,
+        private readonly deleteTaskUseCase: DeleteTaskUseCase,
+    ) {}
 
     @Post()
     create(@Body() createTaskDto: CreateTaskDto): Promise<TaskEntity> {
         return this.createTaskUseCase.execute(createTaskDto);
+    }
+
+    @Put(':taskId')
+    update(
+        @Body() updateTaskDto: UpdateTaskDto,
+        @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    ): Promise<TaskEntity> {
+        return this.updateTaskUseCase.execute(updateTaskDto, taskId);
+    }
+
+    @Get(':taskId')
+    findOne(
+        @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    ): Promise<TaskEntity> {
+        return this.findOneTaskUseCase.execute(taskId);
+    }
+
+    @Delete(':taskId')
+    delete(
+        @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    ): Promise<void> {
+        return this.deleteTaskUseCase.execute(taskId);
     }
 }

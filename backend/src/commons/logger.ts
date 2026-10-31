@@ -3,7 +3,7 @@ import { ConsoleLogger, Injectable } from '@nestjs/common';
 export interface LogMetadata {
     teamId?: string;
     teamName?: string;
-    taskName?: string;
+    taskTitle?: string;
     taskId?: string;
     [key: string]: unknown;
 }
