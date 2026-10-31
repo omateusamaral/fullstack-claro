@@ -21,5 +21,6 @@ import { FindOneTeamUseCase } from './application/use-cases/find-one-team.use-ca
         DeleteTeamUseCase,
         { provide: TeamRepository, useClass: TypeOrmTeamRepository },
     ],
+    exports: [FindOneTeamUseCase],
 })
 export class TeamsModule {}
