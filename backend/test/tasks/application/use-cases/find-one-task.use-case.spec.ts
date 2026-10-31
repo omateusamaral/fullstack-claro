@@ -7,6 +7,9 @@ describe('FindOneTaskUseCase', () => {
     const task = {
         id: 'task-id',
         title: 'Task title',
+        team: {
+            id: 'team-id',
+        },
     } as TaskEntity;
 
     it('returns a task successfully', async () => {
@@ -17,11 +20,14 @@ describe('FindOneTaskUseCase', () => {
         const useCase = new FindOneTaskUseCase(taskRepository);
 
         // Act
-        const result = await useCase.execute(task.id);
+        const result = await useCase.execute(task.id, task.team.id);
 
         // Assert
         expect(result).toBe(task);
-        expect(taskRepository.findOneById).toHaveBeenCalledWith(task.id);
+        expect(taskRepository.findOneById).toHaveBeenCalledWith(
+            task.id,
+            task.team.id,
+        );
     });
 
     it('throws NotFoundException when the task does not exist', async () => {
@@ -32,7 +38,7 @@ describe('FindOneTaskUseCase', () => {
         const useCase = new FindOneTaskUseCase(taskRepository);
 
         // Act
-        const result = useCase.execute(task.id);
+        const result = useCase.execute(task.id, task.team.id);
 
         // Assert
         await expect(result).rejects.toBeInstanceOf(NotFoundException);

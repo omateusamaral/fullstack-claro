@@ -25,9 +25,12 @@ export class TypeOrmTaskRepository implements TaskRepository {
         this.repository.merge(taskToBeUpdated, data);
         return await this.repository.save(taskToBeUpdated);
     }
-    async findOneById(taskId: string): Promise<TaskEntity | null> {
+    async findOneById(
+        taskId: string,
+        teamId: string,
+    ): Promise<TaskEntity | null> {
         return await this.repository.findOne({
-            where: { id: taskId },
+            where: { id: taskId, team: { id: teamId } },
             relations: { team: true },
         });
     }

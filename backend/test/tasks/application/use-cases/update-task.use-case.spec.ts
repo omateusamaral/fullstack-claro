@@ -1,5 +1,8 @@
 import { UpdateTaskUseCase } from '../../../../src/tasks/application/use-cases/update-task.use-case';
-import { TaskEntity, TaskStatus } from '../../../../src/tasks/domain/entities/tasks.entity';
+import {
+    TaskEntity,
+    TaskStatus,
+} from '../../../../src/tasks/domain/entities/tasks.entity';
 import { TaskRepository } from '../../../../src/tasks/domain/repositories/task.repository';
 import { FindOneTaskUseCase } from '../../../../src/tasks/application/use-cases/find-one-task.use-case';
 
@@ -32,11 +35,18 @@ describe('UpdateTaskUseCase', () => {
         );
 
         // Act
-        const result = await useCase.execute(updateTaskDto, task.id);
+        const result = await useCase.execute(
+            updateTaskDto,
+            task.id,
+            task.team.id,
+        );
 
         // Assert
         expect(result).toBe(updatedTask);
-        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(task.id);
+        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(
+            task.id,
+            task.team.id,
+        );
         expect(taskRepository.update).toHaveBeenCalledWith(
             task,
             expect.objectContaining(updateTaskDto),
@@ -59,7 +69,7 @@ describe('UpdateTaskUseCase', () => {
         );
 
         // Act
-        const result = useCase.execute(updateTaskDto, task.id);
+        const result = useCase.execute(updateTaskDto, task.id, task.team.id);
 
         // Assert
         await expect(result).rejects.toBe(error);

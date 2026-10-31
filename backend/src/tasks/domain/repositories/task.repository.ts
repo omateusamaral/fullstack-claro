@@ -7,7 +7,10 @@ export abstract class TaskRepository {
         taskToBeUpdated: TaskEntity,
         data: Partial<TaskEntity>,
     ): Promise<TaskEntity>;
-    abstract findOneById(taskId: string): Promise<TaskEntity | null>;
+    abstract findOneById(
+        taskId: string,
+        teamId: string,
+    ): Promise<TaskEntity | null>;
     abstract delete(taskId: string): Promise<void>;
     abstract findAll(query: FindAllTasksDto): Promise<{
         tasks: TaskEntity[];

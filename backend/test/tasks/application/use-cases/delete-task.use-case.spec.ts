@@ -24,10 +24,13 @@ describe('DeleteTaskUseCase', () => {
         );
 
         // Act
-        await useCase.execute(task.id);
+        await useCase.execute(task.id, task.team.id);
 
         // Assert
-        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(task.id);
+        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(
+            task.id,
+            task.team.id,
+        );
         expect(taskRepository.delete).toHaveBeenCalledWith(task.id);
     });
 
@@ -46,11 +49,14 @@ describe('DeleteTaskUseCase', () => {
         );
 
         // Act
-        const result = useCase.execute(task.id);
+        const result = useCase.execute(task.id, task.team.id);
 
         // Assert
         await expect(result).rejects.toBe(error);
-        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(task.id);
+        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(
+            task.id,
+            task.team.id,
+        );
     });
 
     it('finds all tasks with a due date successfully', async () => {

@@ -15,10 +15,13 @@ export class UpdateTaskUseCase {
     async execute(
         updateTaskDto: UpdateTaskDto,
         taskId: string,
+        teamId: string,
     ): Promise<TaskEntity> {
         try {
-            const taskToBeUpdated =
-                await this.FindOneTaskUseCase.execute(taskId);
+            const taskToBeUpdated = await this.FindOneTaskUseCase.execute(
+                taskId,
+                teamId,
+            );
 
             const taskEntityTransformed = plainToInstance(TaskEntity, {
                 ...updateTaskDto,

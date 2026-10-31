@@ -29,11 +29,12 @@ export class TasksController {
         private readonly updateTaskUseCase: UpdateTaskUseCase,
         private readonly deleteTaskUseCase: DeleteTaskUseCase,
     ) {}
-    @Get(':taskId')
+    @Get(':taskId/:teamId')
     findOne(
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
+        @Param('teamId', new ParseUUIDPipe()) teamId: string,
     ): Promise<TaskEntity> {
-        return this.findOneTaskUseCase.execute(taskId);
+        return this.findOneTaskUseCase.execute(taskId, teamId);
     }
 
     @Get()
@@ -51,19 +52,21 @@ export class TasksController {
         return this.createTaskUseCase.execute(createTaskDto);
     }
 
-    @Put(':taskId')
+    @Put(':taskId/:teamId')
     update(
         @Body() updateTaskDto: UpdateTaskDto,
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
+        @Param('teamId', new ParseUUIDPipe()) teamId: string,
     ): Promise<TaskEntity> {
-        return this.updateTaskUseCase.execute(updateTaskDto, taskId);
+        return this.updateTaskUseCase.execute(updateTaskDto, taskId, teamId);
     }
 
-    @Delete(':taskId')
+    @Delete(':taskId/:teamId')
     @HttpCode(204)
     delete(
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
+        @Param('teamId', new ParseUUIDPipe()) teamId: string,
     ): Promise<void> {
-        return this.deleteTaskUseCase.execute(taskId);
+        return this.deleteTaskUseCase.execute(taskId, teamId);
     }
 }

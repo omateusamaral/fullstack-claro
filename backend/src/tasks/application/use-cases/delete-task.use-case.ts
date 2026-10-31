@@ -10,9 +10,9 @@ export class DeleteTaskUseCase {
         private readonly findOneTaskUseCase: FindOneTaskUseCase,
     ) {}
 
-    async execute(taskId: string): Promise<void> {
+    async execute(taskId: string, teamId: string): Promise<void> {
         try {
-            const task = await this.findOneTaskUseCase.execute(taskId);
+            const task = await this.findOneTaskUseCase.execute(taskId, teamId);
             await this.taskRepository.delete(taskId);
             this.logger.log('Task deleted successfully', {
                 taskId,
