@@ -15,7 +15,7 @@ export class CreateTaskUseCase {
 
     async execute(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
         try {
-            const team = await this.findOneTeamUseCase.findOneById(
+            const team = await this.findOneTeamUseCase.execute(
                 createTaskDto.teamId,
             );
 

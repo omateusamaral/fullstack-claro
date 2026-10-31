@@ -8,7 +8,7 @@ describe('UpdateTeamUseCase', () => {
     let useCase: UpdateTeamUseCase;
     let teamRepository: jest.Mocked<TeamRepository>;
     let findOneTeamUseCase: FindOneTeamUseCase;
-    let findOneByIdMock: jest.SpiedFunction<FindOneTeamUseCase['findOneById']>;
+    let findOneByIdMock: jest.SpiedFunction<FindOneTeamUseCase['execute']>;
 
     beforeEach(() => {
         teamRepository = {
@@ -19,7 +19,7 @@ describe('UpdateTeamUseCase', () => {
             delete: jest.fn(),
         };
         findOneTeamUseCase = new FindOneTeamUseCase(teamRepository);
-        findOneByIdMock = jest.spyOn(findOneTeamUseCase, 'findOneById');
+        findOneByIdMock = jest.spyOn(findOneTeamUseCase, 'execute');
         useCase = new UpdateTeamUseCase(teamRepository, findOneTeamUseCase);
     });
 

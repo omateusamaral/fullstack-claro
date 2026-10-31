@@ -25,7 +25,7 @@ describe('FindOneTeamUseCase', () => {
         teamRepository.findOneById.mockResolvedValue(team);
 
         // Act
-        const result = await useCase.findOneById(teamId);
+        const result = await useCase.execute(teamId);
 
         // Assert
         expect(result).toBe(team);
@@ -38,7 +38,7 @@ describe('FindOneTeamUseCase', () => {
         teamRepository.findOneById.mockResolvedValue(null);
 
         // Act
-        const action = useCase.findOneById(teamId);
+        const action = useCase.execute(teamId);
 
         // Assert
         await expect(action).rejects.toBeInstanceOf(NotFoundException);
@@ -51,7 +51,7 @@ describe('FindOneTeamUseCase', () => {
         teamRepository.findOneById.mockRejectedValue(error);
 
         // Act
-        const action = useCase.findOneById('team-id');
+        const action = useCase.execute('team-id');
 
         // Assert
         await expect(action).rejects.toBe(error);

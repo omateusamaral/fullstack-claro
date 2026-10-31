@@ -22,12 +22,28 @@ import { FindAllTasksUseCase } from '../../application/use-cases/find-all-tasks.
 @Controller('tasks')
 export class TasksController {
     constructor(
+        private readonly findOneTaskUseCase: FindOneTaskUseCase,
+        private readonly findAllTasksUseCase: FindAllTasksUseCase,
         private readonly createTaskUseCase: CreateTaskUseCase,
         private readonly updateTaskUseCase: UpdateTaskUseCase,
-        private readonly findOneTaskUseCase: FindOneTaskUseCase,
         private readonly deleteTaskUseCase: DeleteTaskUseCase,
-        private readonly findAllTasksUseCase: FindAllTasksUseCase,
     ) {}
+    @Get(':taskId')
+    findOne(
+        @Param('taskId', new ParseUUIDPipe()) taskId: string,
+    ): Promise<TaskEntity> {
+        return this.findOneTaskUseCase.execute(taskId);
+    }
+
+    @Get()
+    findAll(@Query() query: FindAllTasksDto): Promise<{
+        tasks: TaskEntity[];
+        limit: number;
+        offset: number;
+        total: number;
+    }> {
+        return this.findAllTasksUseCase.execute(query);
+    }
 
     @Post()
     create(@Body() createTaskDto: CreateTaskDto): Promise<TaskEntity> {
@@ -42,27 +58,10 @@ export class TasksController {
         return this.updateTaskUseCase.execute(updateTaskDto, taskId);
     }
 
-    @Get(':taskId')
-    findOne(
-        @Param('taskId', new ParseUUIDPipe()) taskId: string,
-    ): Promise<TaskEntity> {
-        return this.findOneTaskUseCase.execute(taskId);
-    }
-
     @Delete(':taskId')
     delete(
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
     ): Promise<void> {
         return this.deleteTaskUseCase.execute(taskId);
-    }
-
-    @Get()
-    findAll(@Query() query: FindAllTasksDto): Promise<{
-        tasks: TaskEntity[];
-        limit: number;
-        offset: number;
-        total: number;
-    }> {
-        return this.findAllTasksUseCase.execute(query);
     }
 }

@@ -7,7 +7,7 @@ export class FindOneTeamUseCase {
     private readonly logger = new Logger(FindOneTeamUseCase.name);
     constructor(private readonly teamRepository: TeamRepository) {}
 
-    async findOneById(teamId: string): Promise<TeamEntity> {
+    async execute(teamId: string): Promise<TeamEntity> {
         const team = await this.teamRepository.findOneById(teamId);
         if (!team) {
             this.logger.error('Team not found', { teamId });

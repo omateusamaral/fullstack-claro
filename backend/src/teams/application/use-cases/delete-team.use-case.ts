@@ -12,7 +12,7 @@ export class DeleteTeamUseCase {
 
     async execute(teamId: string): Promise<void> {
         try {
-            await this.findOneTeamUseCase.findOneById(teamId);
+            await this.findOneTeamUseCase.execute(teamId);
             await this.teamRepository.delete(teamId);
             this.logger.log('Team deleted successfully', {
                 teamId,

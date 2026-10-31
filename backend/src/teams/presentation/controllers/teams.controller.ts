@@ -17,15 +17,21 @@ import { UpdateTeamUseCase } from '../../application/use-cases/update-team.use-c
 import { FindAllTeamsUseCase } from '../../application/use-cases/find-all-teams.use-case';
 import { FindAllTeamsDto } from '../dtos/find-all-teams.dto';
 import { DeleteTeamUseCase } from '../../application/use-cases/delete-team.use-case';
+import { FindOneTeamUseCase } from '../../application/use-cases/find-one-team.use-case';
 
 @Controller('teams')
 export class TeamsController {
     constructor(
+        private readonly findOneTeamUseCase: FindOneTeamUseCase,
+        private readonly findAllTeamsUseCase: FindAllTeamsUseCase,
         private readonly createTeamUseCase: CreateTeamUseCase,
         private readonly updateTeamUseCase: UpdateTeamUseCase,
-        private readonly findAllTeamsUseCase: FindAllTeamsUseCase,
         private readonly deleteTeamUseCase: DeleteTeamUseCase,
     ) {}
+    @Get(':teamId')
+    findOne(@Param('teamId', new ParseUUIDPipe()) teamId: string) {
+        return this.findOneTeamUseCase.execute(teamId);
+    }
     @Get()
     findAll(@Query() query: FindAllTeamsDto) {
         return this.findAllTeamsUseCase.execute(query);

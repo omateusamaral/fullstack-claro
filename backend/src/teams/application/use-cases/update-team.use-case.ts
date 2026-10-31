@@ -19,7 +19,7 @@ export class UpdateTeamUseCase {
     ): Promise<TeamEntity> {
         try {
             const teamToBeUpdated =
-                await this.findOneTeamUseCase.findOneById(teamId);
+                await this.findOneTeamUseCase.execute(teamId);
             const teamEntityTransformed = plainToInstance(
                 TeamEntity,
                 updateTeamDto,

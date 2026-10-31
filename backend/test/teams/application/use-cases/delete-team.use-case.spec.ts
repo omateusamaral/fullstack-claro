@@ -6,7 +6,7 @@ describe('DeleteTeamUseCase', () => {
     let useCase: DeleteTeamUseCase;
     let teamRepository: jest.Mocked<TeamRepository>;
     let findOneTeamUseCase: FindOneTeamUseCase;
-    let findOneByIdMock: jest.SpiedFunction<FindOneTeamUseCase['findOneById']>;
+    let findOneByIdMock: jest.SpiedFunction<FindOneTeamUseCase['execute']>;
 
     beforeEach(() => {
         teamRepository = {
