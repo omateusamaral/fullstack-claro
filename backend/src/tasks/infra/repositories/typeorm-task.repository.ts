@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { TaskEntity } from '../../domain/entities/tasks.entity';
+import { LessThanOrEqual, Repository } from 'typeorm';
+import { TaskEntity, TaskStatus } from '../../domain/entities/tasks.entity';
 import { TaskRepository } from '../../domain/repositories/task.repository';
 import { FindAllTasksDto } from '../../presentation/dtos/find-all-tasks.dto';
 
@@ -64,5 +64,15 @@ export class TypeOrmTaskRepository implements TaskRepository {
             .take(limit)
             .getManyAndCount();
         return { tasks, limit, offset, total };
+    }
+
+    async findDueDateTasks(): Promise<TaskEntity[]> {
+        return this.repository.find({
+            where: {
+                dueDate: LessThanOrEqual(new Date()),
+                status: TaskStatus.COMPLETED,
+            },
+            relations: { team: true },
+        });
     }
 }

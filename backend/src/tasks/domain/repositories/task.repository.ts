@@ -15,4 +15,6 @@ export abstract class TaskRepository {
         offset: number;
         total: number;
     }>;
+
+    abstract findDueDateTasks(): Promise<TaskEntity[]>;
 }

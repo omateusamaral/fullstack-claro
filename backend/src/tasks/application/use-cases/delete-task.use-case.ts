@@ -27,4 +27,23 @@ export class DeleteTaskUseCase {
             throw error;
         }
     }
+
+    async deleteAllDueDateTasks(): Promise<void> {
+        try {
+            const tasks = await this.taskRepository.findDueDateTasks();
+
+            for (const task of tasks) {
+                this.logger.log('Task deleted successfully', {
+                    taskId: task.id,
+                    taskTitle: task.title,
+                    teamId: task.team.id,
+                });
+            }
+        } catch (error) {
+            this.logger.error('Error deleting tasks', {
+                error,
+            });
+            throw error;
+        }
+    }
 }
