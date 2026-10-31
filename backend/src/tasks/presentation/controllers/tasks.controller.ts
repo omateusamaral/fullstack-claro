@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
     Param,
     ParseUUIDPipe,
     Post,
@@ -59,6 +60,7 @@ export class TasksController {
     }
 
     @Delete(':taskId')
+    @HttpCode(204)
     delete(
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
     ): Promise<void> {
