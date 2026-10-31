@@ -7,6 +7,7 @@ import {
     ParseUUIDPipe,
     Post,
     Put,
+    Query,
 } from '@nestjs/common';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { CreateTaskUseCase } from '../../application/use-cases/create-task.use-case';
@@ -15,6 +16,8 @@ import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { UpdateTaskUseCase } from '../../application/use-cases/update-task.use-case';
 import { FindOneTaskUseCase } from '../../application/use-cases/find-one-task.use-case';
 import { DeleteTaskUseCase } from '../../application/use-cases/delete-task.use-case';
+import { FindAllTasksDto } from '../dtos/find-all-tasks.dto';
+import { FindAllTasksUseCase } from '../../application/use-cases/find-all-tasks.use-case';
 
 @Controller('tasks')
 export class TasksController {
@@ -23,6 +26,7 @@ export class TasksController {
         private readonly updateTaskUseCase: UpdateTaskUseCase,
         private readonly findOneTaskUseCase: FindOneTaskUseCase,
         private readonly deleteTaskUseCase: DeleteTaskUseCase,
+        private readonly findAllTasksUseCase: FindAllTasksUseCase,
     ) {}
 
     @Post()
@@ -50,5 +54,15 @@ export class TasksController {
         @Param('taskId', new ParseUUIDPipe()) taskId: string,
     ): Promise<void> {
         return this.deleteTaskUseCase.execute(taskId);
+    }
+
+    @Get()
+    findAll(@Query() query: FindAllTasksDto): Promise<{
+        tasks: TaskEntity[];
+        limit: number;
+        offset: number;
+        total: number;
+    }> {
+        return this.findAllTasksUseCase.execute(query);
     }
 }

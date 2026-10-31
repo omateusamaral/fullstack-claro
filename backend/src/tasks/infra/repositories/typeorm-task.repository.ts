@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskEntity } from '../../domain/entities/tasks.entity';
 import { TaskRepository } from '../../domain/repositories/task.repository';
+import { FindAllTasksDto } from '../../presentation/dtos/find-all-tasks.dto';
 
 @Injectable()
 export class TypeOrmTaskRepository implements TaskRepository {
@@ -33,5 +34,35 @@ export class TypeOrmTaskRepository implements TaskRepository {
 
     async delete(taskId: string): Promise<void> {
         await this.repository.delete(taskId);
+    }
+
+    async findAll(query: FindAllTasksDto): Promise<{
+        tasks: TaskEntity[];
+        limit: number;
+        offset: number;
+        total: number;
+    }> {
+        const { limit, offset, search, status, teamId } = query;
+
+        const queryBuilder = this.repository
+            .createQueryBuilder('task')
+            .where('task.teamId = :teamId', { teamId });
+
+        if (search) {
+            queryBuilder.andWhere(
+                '(task.title ILIKE :search OR task.description ILIKE :search)',
+                { search: `%${search}%` },
+            );
+        }
+
+        if (status) {
+            queryBuilder.andWhere('task.status = :status', { status });
+        }
+
+        const [tasks, total] = await queryBuilder
+            .skip(offset)
+            .take(limit)
+            .getManyAndCount();
+        return { tasks, limit, offset, total };
     }
 }

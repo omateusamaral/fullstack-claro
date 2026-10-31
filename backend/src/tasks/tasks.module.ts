@@ -9,6 +9,7 @@ import { TypeOrmTaskRepository } from './infra/repositories/typeorm-task.reposit
 import { FindOneTaskUseCase } from './application/use-cases/find-one-task.use-case';
 import { UpdateTaskUseCase } from './application/use-cases/update-task.use-case';
 import { DeleteTaskUseCase } from './application/use-cases/delete-task.use-case';
+import { FindAllTasksUseCase } from './application/use-cases/find-all-tasks.use-case';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TaskEntity]), TeamsModule],
@@ -18,6 +19,7 @@ import { DeleteTaskUseCase } from './application/use-cases/delete-task.use-case'
         UpdateTaskUseCase,
         FindOneTaskUseCase,
         DeleteTaskUseCase,
+        FindAllTasksUseCase,
         { provide: TaskRepository, useClass: TypeOrmTaskRepository },
     ],
 })
