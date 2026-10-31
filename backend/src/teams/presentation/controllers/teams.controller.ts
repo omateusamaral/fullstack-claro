@@ -3,7 +3,6 @@ import {
     Controller,
     Delete,
     Get,
-    HttpCode,
     Param,
     ParseUUIDPipe,
     Post,
@@ -45,7 +44,6 @@ export class TeamsController {
     }
 
     @Delete(':teamId')
-    @HttpCode(204)
     delete(
         @Param('teamId', new ParseUUIDPipe()) teamId: string,
     ): Promise<void> {

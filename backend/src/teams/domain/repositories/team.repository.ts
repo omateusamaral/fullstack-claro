@@ -1,10 +1,9 @@
-import { CreateTeamDto } from '../../presentation/dtos/create-team.dto';
 import { UpdateTeamDto } from '../../presentation/dtos/update-team.dto';
 import { TeamEntity } from '../entities/teams.entity';
 import { FindAllTeamsDto } from '../../presentation/dtos/find-all-teams.dto';
 
 export abstract class TeamRepository {
-    abstract create(data: CreateTeamDto): Promise<TeamEntity>;
+    abstract create(data: TeamEntity): Promise<TeamEntity>;
     abstract update(
         teamToBeUpdated: TeamEntity,
         data: UpdateTeamDto,
