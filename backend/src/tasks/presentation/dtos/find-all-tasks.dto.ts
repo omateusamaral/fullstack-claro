@@ -12,10 +12,6 @@ import {
 import { TaskStatus } from '../../domain/entities/tasks.entity';
 
 export class FindAllTasksDto {
-    @IsOptional()
-    @IsUUID()
-    teamId: string;
-
     @Type(() => Number)
     @IsNotEmpty()
     @IsInt()
@@ -36,4 +32,12 @@ export class FindAllTasksDto {
     @IsOptional()
     @IsEnum(TaskStatus)
     status?: TaskStatus;
+
+    @IsOptional()
+    @IsUUID()
+    teamId?: string;
+
+    @IsOptional()
+    @IsEnum(['ASC', 'DESC'])
+    order?: 'ASC' | 'DESC' = 'ASC';
 }

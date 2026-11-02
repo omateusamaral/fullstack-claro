@@ -22,6 +22,7 @@ export class FindAllTasksUseCase {
                 search: query.search,
                 status: query.status,
                 teamId: query.teamId,
+                order: query.order,
             });
             return tasks;
         } catch (error) {
@@ -32,6 +33,7 @@ export class FindAllTasksUseCase {
                 search: query.search,
                 status: query.status,
                 teamId: query.teamId,
+                order: query.order,
             });
             throw error;
         }
