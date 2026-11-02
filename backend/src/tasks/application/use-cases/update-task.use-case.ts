@@ -19,9 +19,8 @@ export class UpdateTaskUseCase {
         taskId: string,
     ): Promise<TaskEntity> {
         try {
-            const taskToBeUpdated = await this.FindOneTaskUseCase.execute(
-                taskId,
-            );
+            const taskToBeUpdated =
+                await this.FindOneTaskUseCase.execute(taskId);
             const { teamIds, ...taskData } = updateTaskDto;
             const teams = teamIds
                 ? await Promise.all(
@@ -29,7 +28,7 @@ export class UpdateTaskUseCase {
                           this.findOneTeamUseCase.execute(teamId),
                       ),
                   )
-                : undefined;
+                : [];
 
             const taskEntityTransformed = plainToInstance(TaskEntity, {
                 ...taskData,
