@@ -66,7 +66,7 @@ export class TypeOrmTaskRepository implements TaskRepository {
         const [tasks, total] = await queryBuilder
             .skip(offset)
             .take(limit)
-            .orderBy('task.name', order === 'DESC' ? 'DESC' : 'ASC')
+            .orderBy('task.title', order === 'DESC' ? 'DESC' : 'ASC')
             .getManyAndCount();
         return { tasks, limit, offset, total };
     }
