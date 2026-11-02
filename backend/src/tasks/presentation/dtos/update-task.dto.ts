@@ -4,7 +4,6 @@ import {
     MinLength,
     IsEnum,
     IsRFC3339,
-    ArrayNotEmpty,
     ArrayUnique,
     IsArray,
     IsUUID,
@@ -31,7 +30,6 @@ export class UpdateTaskDto {
 
     @IsOptional()
     @IsArray()
-    @ArrayNotEmpty()
     @ArrayUnique()
     @IsUUID('4', { each: true })
     teamIds?: string[];

@@ -4,7 +4,6 @@ import {
     IsOptional,
     IsRFC3339,
     IsUUID,
-    ArrayNotEmpty,
     ArrayUnique,
     IsArray,
     MaxLength,
@@ -30,9 +29,9 @@ export class CreateTaskDto {
     @IsRFC3339()
     dueDate?: Date;
 
+    @IsOptional()
     @IsArray()
-    @ArrayNotEmpty()
     @ArrayUnique()
     @IsUUID('4', { each: true })
-    teamIds: string[];
+    teamIds?: string[];
 }

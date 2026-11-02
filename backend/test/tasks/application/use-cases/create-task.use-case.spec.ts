@@ -51,6 +51,41 @@ describe('CreateTaskUseCase', () => {
         );
     });
 
+    it('creates a task without teams', async () => {
+        // Arrange
+        const createTaskDto = {
+            title: task.title,
+            teamIds: [],
+        };
+        const taskWithoutTeams = {
+            ...task,
+            teams: [],
+        } as TaskEntity;
+        const taskRepository = {
+            create: jest.fn().mockResolvedValue(taskWithoutTeams),
+        } as unknown as jest.Mocked<TaskRepository>;
+        const findOneTeamUseCase = {
+            execute: jest.fn(),
+        } as unknown as jest.Mocked<FindOneTeamUseCase>;
+        const useCase = new CreateTaskUseCase(
+            taskRepository,
+            findOneTeamUseCase,
+        );
+
+        // Act
+        const result = await useCase.execute(createTaskDto);
+
+        // Assert
+        expect(result).toBe(taskWithoutTeams);
+        expect(findOneTeamUseCase.execute).not.toHaveBeenCalled();
+        expect(taskRepository.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: createTaskDto.title,
+                teams: [],
+            }),
+        );
+    });
+
     it('propagates an error when the team cannot be found', async () => {
         // Arrange
         const error = new Error('Team lookup failed');

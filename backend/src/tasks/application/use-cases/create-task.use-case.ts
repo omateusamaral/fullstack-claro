@@ -17,7 +17,7 @@ export class CreateTaskUseCase {
         try {
             const { teamIds, ...taskData } = createTaskDto;
             const teams = await Promise.all(
-                teamIds.map((teamId) =>
+                (teamIds ?? []).map((teamId) =>
                     this.findOneTeamUseCase.execute(teamId),
                 ),
             );
