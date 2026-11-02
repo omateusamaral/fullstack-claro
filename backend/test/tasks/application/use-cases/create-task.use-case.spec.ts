@@ -14,8 +14,8 @@ describe('CreateTaskUseCase', () => {
         id: 'task-id',
         title: 'Task title',
         description: 'Task description',
-        status: TaskStatus.READY_FOR_DEVELOPMENT,
-        team,
+        status: TaskStatus.PENDING,
+        teams: [team],
     } as unknown as TaskEntity;
 
     it('creates a task successfully', async () => {
@@ -24,7 +24,7 @@ describe('CreateTaskUseCase', () => {
             title: task.title,
             description: task.description,
             status: task.status,
-            teamId: team.id,
+            teamIds: [team.id],
         };
         const taskRepository = {
             create: jest.fn().mockResolvedValue(task),
@@ -46,7 +46,7 @@ describe('CreateTaskUseCase', () => {
         expect(taskRepository.create).toHaveBeenCalledWith(
             expect.objectContaining({
                 title: createTaskDto.title,
-                team,
+                teams: [team],
             }),
         );
     });
@@ -54,7 +54,7 @@ describe('CreateTaskUseCase', () => {
     it('propagates an error when the team cannot be found', async () => {
         // Arrange
         const error = new Error('Team lookup failed');
-        const createTaskDto = { title: 'Task title', teamId: team.id };
+        const createTaskDto = { title: 'Task title', teamIds: [team.id] };
         const taskRepository = {
             create: jest.fn(),
         } as unknown as jest.Mocked<TaskRepository>;

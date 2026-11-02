@@ -15,13 +15,16 @@ export class CreateTaskUseCase {
 
     async execute(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
         try {
-            const team = await this.findOneTeamUseCase.execute(
-                createTaskDto.teamId,
+            const { teamIds, ...taskData } = createTaskDto;
+            const teams = await Promise.all(
+                teamIds.map((teamId) =>
+                    this.findOneTeamUseCase.execute(teamId),
+                ),
             );
 
             const taskEntityTransformed = plainToInstance(TaskEntity, {
-                ...createTaskDto,
-                team,
+                ...taskData,
+                teams,
             });
             const task = await this.taskRepository.create(
                 taskEntityTransformed,
@@ -29,14 +32,14 @@ export class CreateTaskUseCase {
             this.logger.log('Task created successfully', {
                 taskId: task.id,
                 taskName: task.title,
-                teamId: task.team.id,
+                teamIds: task.teams.map((team) => team.id),
             });
             return task;
         } catch (error) {
             this.logger.error('Error creating task for the team', {
                 error,
                 taskName: createTaskDto.title,
-                teamId: createTaskDto.teamId,
+                teamIds: createTaskDto.teamIds,
             });
             throw error;
         }

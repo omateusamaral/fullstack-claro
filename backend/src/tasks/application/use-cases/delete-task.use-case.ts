@@ -10,14 +10,14 @@ export class DeleteTaskUseCase {
         private readonly findOneTaskUseCase: FindOneTaskUseCase,
     ) {}
 
-    async execute(taskId: string, teamId: string): Promise<void> {
+    async execute(taskId: string): Promise<void> {
         try {
-            const task = await this.findOneTaskUseCase.execute(taskId, teamId);
+            const task = await this.findOneTaskUseCase.execute(taskId);
             await this.taskRepository.delete(taskId);
             this.logger.log('Task deleted successfully', {
                 taskId,
                 taskTitle: task.title,
-                teamId: task.team.id,
+                teamIds: task.teams.map((team) => team.id),
             });
         } catch (error) {
             this.logger.error('Error deleting task', {
@@ -36,7 +36,7 @@ export class DeleteTaskUseCase {
                 this.logger.log('Task deleted successfully', {
                     taskId: task.id,
                     taskTitle: task.title,
-                    teamId: task.team.id,
+                    teamIds: task.teams.map((team) => team.id),
                 });
             }
         } catch (error) {

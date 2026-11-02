@@ -7,7 +7,7 @@ describe('DeleteTaskUseCase', () => {
     const task = {
         id: 'task-id',
         title: 'Task title',
-        team: { id: 'team-id', name: 'Team' },
+        teams: [{ id: 'team-id', name: 'Team' }],
     } as unknown as TaskEntity;
 
     it('deletes a task successfully', async () => {
@@ -24,13 +24,10 @@ describe('DeleteTaskUseCase', () => {
         );
 
         // Act
-        await useCase.execute(task.id, task.team.id);
+        await useCase.execute(task.id);
 
         // Assert
-        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(
-            task.id,
-            task.team.id,
-        );
+        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(task.id);
         expect(taskRepository.delete).toHaveBeenCalledWith(task.id);
     });
 
@@ -49,14 +46,11 @@ describe('DeleteTaskUseCase', () => {
         );
 
         // Act
-        const result = useCase.execute(task.id, task.team.id);
+        const result = useCase.execute(task.id);
 
         // Assert
         await expect(result).rejects.toBe(error);
-        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(
-            task.id,
-            task.team.id,
-        );
+        expect(findOneTaskUseCase.execute).toHaveBeenCalledWith(task.id);
     });
 
     it('finds all tasks with a due date successfully', async () => {

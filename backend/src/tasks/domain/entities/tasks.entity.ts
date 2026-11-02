@@ -1,8 +1,8 @@
 import {
     Column,
     Entity,
-    JoinColumn,
-    ManyToOne,
+    JoinTable,
+    ManyToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TeamEntity } from '../../../teams/domain/entities/teams.entity';
@@ -10,7 +10,6 @@ export enum TaskStatus {
     PENDING = 'pendente',
     IN_PROGRESS = 'em progresso',
     COMPLETED = 'concluído',
-    READY_FOR_DEVELOPMENT = 'pronta para desenvolvimento',
 }
 
 @Entity('tasks')
@@ -29,20 +28,22 @@ export class TaskEntity {
             TaskStatus.PENDING,
             TaskStatus.IN_PROGRESS,
             TaskStatus.COMPLETED,
-            TaskStatus.READY_FOR_DEVELOPMENT,
         ],
         nullable: true,
-        default: TaskStatus.READY_FOR_DEVELOPMENT,
+        default: TaskStatus.PENDING,
     })
     status?: TaskStatus;
 
     @Column('timestamp', { nullable: true })
     dueDate?: Date;
 
-    @ManyToOne(() => TeamEntity, (team) => team.tasks, {
-        nullable: false,
+    @ManyToMany(() => TeamEntity, (team) => team.tasks, {
         onDelete: 'RESTRICT',
     })
-    @JoinColumn({ name: 'teamId' })
-    team: TeamEntity;
+    @JoinTable({
+        name: 'task_teams',
+        joinColumn: { name: 'taskId', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'teamId', referencedColumnName: 'id' },
+    })
+    teams: TeamEntity[];
 }

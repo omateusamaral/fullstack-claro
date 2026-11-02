@@ -25,13 +25,10 @@ export class TypeOrmTaskRepository implements TaskRepository {
         this.repository.merge(taskToBeUpdated, data);
         return await this.repository.save(taskToBeUpdated);
     }
-    async findOneById(
-        taskId: string,
-        teamId: string,
-    ): Promise<TaskEntity | null> {
+    async findOneById(taskId: string): Promise<TaskEntity | null> {
         return await this.repository.findOne({
-            where: { id: taskId, team: { id: teamId } },
-            relations: { team: true },
+            where: { id: taskId },
+            relations: { teams: true },
         });
     }
 
@@ -49,7 +46,11 @@ export class TypeOrmTaskRepository implements TaskRepository {
 
         const queryBuilder = this.repository
             .createQueryBuilder('task')
-            .where('task.teamId = :teamId', { teamId });
+            .leftJoinAndSelect('task.teams', 'team');
+
+        if (teamId) {
+            queryBuilder.andWhere('team.id = :teamId', { teamId });
+        }
 
         if (search) {
             queryBuilder.andWhere(
@@ -75,7 +76,7 @@ export class TypeOrmTaskRepository implements TaskRepository {
                 dueDate: LessThanOrEqual(new Date()),
                 status: TaskStatus.COMPLETED,
             },
-            relations: { team: true },
+            relations: { teams: true },
         });
     }
 }

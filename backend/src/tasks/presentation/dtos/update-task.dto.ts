@@ -4,6 +4,10 @@ import {
     MinLength,
     IsEnum,
     IsRFC3339,
+    ArrayNotEmpty,
+    ArrayUnique,
+    IsArray,
+    IsUUID,
 } from 'class-validator';
 import { TaskStatus } from '../../domain/entities/tasks.entity';
 
@@ -24,4 +28,11 @@ export class UpdateTaskDto {
     @IsOptional()
     @IsRFC3339()
     dueDate?: Date;
+
+    @IsOptional()
+    @IsArray()
+    @ArrayNotEmpty()
+    @ArrayUnique()
+    @IsUUID('4', { each: true })
+    teamIds?: string[];
 }

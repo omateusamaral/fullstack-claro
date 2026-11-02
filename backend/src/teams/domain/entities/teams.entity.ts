@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskEntity } from '../../../tasks/domain/entities/tasks.entity';
 
 @Entity('teams')
@@ -15,6 +15,6 @@ export class TeamEntity {
     @Column('varchar', { length: 200, nullable: true })
     description?: string;
 
-    @OneToMany(() => TaskEntity, (task) => task.team)
+    @ManyToMany(() => TaskEntity, (task) => task.teams)
     tasks: TaskEntity[];
 }

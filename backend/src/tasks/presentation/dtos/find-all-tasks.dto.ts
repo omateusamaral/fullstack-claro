@@ -12,7 +12,7 @@ import {
 import { TaskStatus } from '../../domain/entities/tasks.entity';
 
 export class FindAllTasksDto {
-    @IsNotEmpty()
+    @IsOptional()
     @IsUUID()
     teamId: string;
 

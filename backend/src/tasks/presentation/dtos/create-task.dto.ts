@@ -4,6 +4,9 @@ import {
     IsOptional,
     IsRFC3339,
     IsUUID,
+    ArrayNotEmpty,
+    ArrayUnique,
+    IsArray,
     MaxLength,
     MinLength,
 } from 'class-validator';
@@ -21,13 +24,15 @@ export class CreateTaskDto {
 
     @IsOptional()
     @IsEnum(TaskStatus)
-    status?: TaskStatus = TaskStatus.READY_FOR_DEVELOPMENT;
+    status?: TaskStatus = TaskStatus.PENDING;
 
     @IsOptional()
     @IsRFC3339()
     dueDate?: Date;
 
-    @IsNotEmpty()
-    @IsUUID()
-    teamId: string;
+    @IsArray()
+    @ArrayNotEmpty()
+    @ArrayUnique()
+    @IsUUID('4', { each: true })
+    teamIds: string[];
 }

@@ -4,27 +4,36 @@ import { TaskEntity } from '../../domain/entities/tasks.entity';
 import { UpdateTaskDto } from '../../presentation/dtos/update-task.dto';
 import { FindOneTaskUseCase } from './find-one-task.use-case';
 import { plainToInstance } from 'class-transformer';
+import { FindOneTeamUseCase } from '../../../teams/application/use-cases/find-one-team.use-case';
 @Injectable()
 export class UpdateTaskUseCase {
     private readonly logger = new Logger(UpdateTaskUseCase.name);
     constructor(
         private readonly taskRepository: TaskRepository,
         private readonly FindOneTaskUseCase: FindOneTaskUseCase,
+        private readonly findOneTeamUseCase: FindOneTeamUseCase,
     ) {}
 
     async execute(
         updateTaskDto: UpdateTaskDto,
         taskId: string,
-        teamId: string,
     ): Promise<TaskEntity> {
         try {
             const taskToBeUpdated = await this.FindOneTaskUseCase.execute(
                 taskId,
-                teamId,
             );
+            const { teamIds, ...taskData } = updateTaskDto;
+            const teams = teamIds
+                ? await Promise.all(
+                      teamIds.map((teamId) =>
+                          this.findOneTeamUseCase.execute(teamId),
+                      ),
+                  )
+                : undefined;
 
             const taskEntityTransformed = plainToInstance(TaskEntity, {
-                ...updateTaskDto,
+                ...taskData,
+                ...(teams ? { teams } : {}),
             });
             const task = await this.taskRepository.update(
                 taskToBeUpdated,
@@ -34,8 +43,7 @@ export class UpdateTaskUseCase {
             this.logger.log('Task updated successfully', {
                 taskId: task.id,
                 taskTitle: task.title,
-                teamId: task.team.id,
-                teamName: task.team.name,
+                teamIds: task.teams.map((team) => team.id),
             });
             return task;
         } catch (error) {
