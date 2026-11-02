@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+    IsEnum,
     IsInt,
     IsNotEmpty,
     IsOptional,
@@ -25,4 +26,8 @@ export class FindAllTeamsDto {
     @IsOptional()
     @IsString()
     search?: string;
+
+    @IsOptional()
+    @IsEnum(['asc', 'desc'])
+    order?: 'asc' | 'desc' = 'asc';
 }

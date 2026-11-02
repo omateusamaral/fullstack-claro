@@ -49,6 +49,7 @@ export class TypeOrmTeamRepository implements TeamRepository {
                 : {},
             take: limit,
             skip: offset,
+            order: { name: query?.order?.toUpperCase() as 'ASC' | 'DESC' },
         });
 
         return { teams, limit, offset, total };

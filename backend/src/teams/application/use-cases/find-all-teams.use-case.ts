@@ -22,6 +22,7 @@ export class FindAllTeamsUseCase {
                 limit: query.limit,
                 offset: query.offset,
                 search: query.search,
+                sort: query.order,
             });
             return teams;
         } catch (error) {
@@ -30,6 +31,7 @@ export class FindAllTeamsUseCase {
                 limit: query.limit,
                 offset: query.offset,
                 search: query.search,
+                sort: query.order,
             });
             throw error;
         }
