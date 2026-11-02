@@ -108,13 +108,21 @@ npm install
 4. Inicie o banco de dados e os serviços definidos no Docker Compose:
 
 ```bash
+cd backend
 docker compose up -d
 ```
 
-5. Execute as migrations:
+5. Execute as migrations a partir da pasta `backend`:
 
 ```bash
 npm run migration:run
+```
+
+As migrations também inserem dados iniciais para avaliação: 3 times e 10 tarefas.
+Para executar esse carregamento explicitamente, use:
+
+```bash
+npm run seed
 ```
 
 6. Inicie a aplicação:
