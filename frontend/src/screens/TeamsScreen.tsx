@@ -29,13 +29,8 @@ export function TeamsScreen({ navigation }: any) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["teams"] });
     },
-    onError: (error) => {
-      Alert.alert(
-        "Erro",
-        error instanceof Error
-          ? error.message
-          : "Não foi possível remover o time.",
-      );
+    onError: (error: ErrorConstructor) => {
+      Alert.alert("Erro", "Não foi possível remover o time.");
     },
   });
 
