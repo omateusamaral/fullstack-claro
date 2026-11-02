@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { TeamRepository } from '../../domain/repositories/team.repository';
 import { FindOneTeamUseCase } from './find-one-team.use-case';
 
@@ -12,7 +12,12 @@ export class DeleteTeamUseCase {
 
     async execute(teamId: string): Promise<void> {
         try {
-            await this.findOneTeamUseCase.execute(teamId);
+            const team = await this.findOneTeamUseCase.execute(teamId);
+            if (team?.tasks?.length > 0) {
+                throw new ConflictException(
+                    'Cannot delete team with associated tasks',
+                );
+            }
             await this.teamRepository.delete(teamId);
             this.logger.log('Team deleted successfully', {
                 teamId,

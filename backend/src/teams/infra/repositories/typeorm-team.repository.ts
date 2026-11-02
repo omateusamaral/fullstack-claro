@@ -29,7 +29,17 @@ export class TypeOrmTeamRepository implements TeamRepository {
     }
 
     async findOneById(teamId: string): Promise<TeamEntity | null> {
-        return await this.repository.findOne({ where: { id: teamId } });
+        return await this.repository.findOne({
+            where: { id: teamId },
+            select: {
+                id: true,
+                name: true,
+                colorHex: true,
+                description: true,
+                tasks: true,
+            },
+            loadRelationIds: true,
+        });
     }
 
     async findAll(query: FindAllTeamsDto): Promise<{
