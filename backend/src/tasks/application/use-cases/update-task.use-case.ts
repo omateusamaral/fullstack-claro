@@ -22,17 +22,18 @@ export class UpdateTaskUseCase {
             const taskToBeUpdated =
                 await this.FindOneTaskUseCase.execute(taskId);
             const { teamIds, ...taskData } = updateTaskDto;
-            const teams = teamIds
-                ? await Promise.all(
-                      teamIds.map((teamId) =>
-                          this.findOneTeamUseCase.execute(teamId),
-                      ),
-                  )
-                : [];
+            const teams =
+                teamIds === undefined
+                    ? undefined
+                    : await Promise.all(
+                          teamIds.map((teamId) =>
+                              this.findOneTeamUseCase.execute(teamId),
+                          ),
+                      );
 
             const taskEntityTransformed = plainToInstance(TaskEntity, {
                 ...taskData,
-                ...(teams ? { teams } : {}),
+                ...(teams !== undefined ? { teams } : {}),
             });
             const task = await this.taskRepository.update(
                 taskToBeUpdated,

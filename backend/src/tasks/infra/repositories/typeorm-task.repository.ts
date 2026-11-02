@@ -22,8 +22,35 @@ export class TypeOrmTaskRepository implements TaskRepository {
         taskToBeUpdated: TaskEntity,
         data: Partial<TaskEntity>,
     ): Promise<TaskEntity> {
-        this.repository.merge(taskToBeUpdated, data);
-        return await this.repository.save(taskToBeUpdated);
+        const { teams, ...taskData } = data;
+
+        return await this.repository.manager.transaction(async (manager) => {
+            const taskEntity = taskToBeUpdated;
+            manager.merge(TaskEntity, taskEntity, taskData);
+            await manager.save(TaskEntity, taskEntity);
+
+            if (teams !== undefined) {
+                const relation = manager
+                    .createQueryBuilder()
+                    .relation(TaskEntity, 'teams')
+                    .of(taskEntity.id);
+                const currentTeamIds = (taskToBeUpdated.teams ?? []).map(
+                    (team) => team.id,
+                );
+                const updatedTeamIds = teams.map((team) => team.id);
+
+                if (currentTeamIds.length > 0) {
+                    await relation.remove(currentTeamIds);
+                }
+                if (updatedTeamIds.length > 0) {
+                    await relation.add(updatedTeamIds);
+                }
+
+                taskEntity.teams = teams;
+            }
+
+            return taskEntity;
+        });
     }
     async findOneById(taskId: string): Promise<TaskEntity | null> {
         return await this.repository.findOne({

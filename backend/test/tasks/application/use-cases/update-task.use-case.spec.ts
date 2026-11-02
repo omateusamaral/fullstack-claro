@@ -80,4 +80,33 @@ describe('UpdateTaskUseCase', () => {
         await expect(result).rejects.toBe(error);
         expect(taskRepository.update).not.toHaveBeenCalled();
     });
+
+    it('clears all teams when an empty team list is provided', async () => {
+        const updateTaskDto = { teamIds: [] };
+        const taskRepository = {
+            update: jest.fn().mockResolvedValue({
+                ...task,
+                teams: [],
+            }),
+        } as unknown as jest.Mocked<TaskRepository>;
+        const findOneTaskUseCase = {
+            execute: jest.fn().mockResolvedValue(task),
+        } as unknown as jest.Mocked<FindOneTaskUseCase>;
+        const findOneTeamUseCase = {
+            execute: jest.fn(),
+        } as unknown as jest.Mocked<FindOneTeamUseCase>;
+        const useCase = new UpdateTaskUseCase(
+            taskRepository,
+            findOneTaskUseCase,
+            findOneTeamUseCase,
+        );
+
+        await useCase.execute(updateTaskDto, task.id);
+
+        expect(taskRepository.update).toHaveBeenCalledWith(
+            task,
+            expect.objectContaining({ teams: [] }),
+        );
+        expect(findOneTeamUseCase.execute).not.toHaveBeenCalled();
+    });
 });
