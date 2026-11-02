@@ -33,6 +33,11 @@ A ideia dessa organização é evitar que as regras de negócio fiquem acopladas
 
 Também procurei manter as responsabilidades bem definidas, para que uma alteração na persistência, por exemplo, não exija mudanças desnecessárias nos casos de uso.
 
+### 4. Por que escolhi React Query e Zustand?
+
+Escolhi React Query porque o principal desafio da aplicação é sincronizar dados vindos da API: controlar carregamento, erros, cache e atualização após mutations.
+Para o estado global exclusivamente da interface, Zustand seria uma opção adequada por ser leve e exigir pouca configuração. A escolha não foi apenas por familiaridade, mas porque as ferramentas se encaixam.
+
 ## Modelo de dados
 
 ```mermaid
@@ -132,6 +137,56 @@ npm run start
 ```
 
 Após iniciar a aplicação, a documentação da API estará disponível através da rota `/docs`.
+
+## front-end
+
+```bash
+npm install
+cp .env.example .env
+npm start
+```
+
+Defina a URL do backend no `.env`:
+
+```env
+EXPO_PUBLIC_API_URL=http://localhost:3001/api
+```
+
+Em um celular físico, substitua `localhost` pelo IP da máquina que executa o
+backend. O backend precisa estar em execução e com o banco configurado.
+
+### Com Expo Go e WSL
+
+O túnel do Expo publica apenas o bundler, não a API. Para expor a API, abra
+outro terminal e execute:
+
+```bash
+ngrok http 3001
+```
+
+Configure a URL HTTPS gerada no `.env`:
+
+```env
+EXPO_PUBLIC_API_URL=https://seu-endereco.ngrok-free.app/api
+```
+
+Depois reinicie o Expo:
+
+```bash
+npx expo start -c --tunnel
+```
+
+## Scripts
+
+```bash
+npm start                 # inicia o Expo
+npm run android           # inicia no Android
+npm run ios               # inicia no iOS
+npm run web               # inicia na web
+npm run typecheck         # verifica os tipos TypeScript
+npm test                  # executa os testes de componentes
+npm run test:watch        # executa os testes em modo watch
+```
 
 ---
 
@@ -263,3 +318,13 @@ A implementação atual atende ao que foi proposto no desafio. Porém, pensando 
 **Alertas:** configuraria alertas baseados nas métricas e nos logs da aplicação, principalmente para identificar falhas, aumento de latência e problemas de disponibilidade.
 
 Essas melhorias seriam implementadas conforme a necessidade do negócio e os requisitos do ambiente produtivo, evitando adicionar complexidade antes que ela seja realmente necessária.
+
+## front-end
+
+- Adicionaria autenticação, autorização e tratamento específico de sessões.
+- Adicionaria filtros persistentes na URL/estado de navegação e uma estratégia
+  de paginação infinita caso o volume de tarefas cresça significativamente.
+- Usaria observabilidade centralizada para erros, métricas e eventos de produto.
+- Adicionaria testes de navegação e integração com uma API simulada.
+- Avaliaria cache persistente/offline-first e optimistic updates para melhorar
+  a experiência em redes instáveis.

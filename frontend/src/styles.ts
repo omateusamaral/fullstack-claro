@@ -1,0 +1,91 @@
+import { StyleSheet } from "react-native";
+
+export const colors = {
+  ink: "#E1E1E6",
+  muted: "#7C7C8A",
+  primary: "#00875F",
+  error: "#F75A68",
+  background: "#202024",
+  surface: "#29292E",
+  success: "#15803d",
+  warning: "#b45309",
+  black: "#121214",
+};
+
+export const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.background },
+  content: { padding: 20, paddingBottom: 36, paddingTop: 100 },
+  title: {
+    color: colors.ink,
+    fontSize: 28,
+    fontWeight: "800",
+    marginBottom: 6,
+  },
+  subtitle: { color: colors.muted, fontSize: 15, marginBottom: 20 },
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: 16,
+
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: colors.surface,
+  },
+  row: { flexDirection: "row", alignItems: "center" },
+  button: {
+    backgroundColor: colors.primary,
+    paddingVertical: 13,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  buttonSecondary: {
+    paddingVertical: 13,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    alignItems: "center",
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  iconButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: `${colors.primary}66`,
+  },
+  filterButton: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  disabledButton: { opacity: 0.45 },
+  buttonText: { color: "#fff", fontSize: 15, fontWeight: "700" },
+  secondaryButton: { backgroundColor: "#fee2e2" },
+  secondaryButtonText: {
+    color: colors.primary,
+  },
+  input: {
+    backgroundColor: colors.black,
+    color: colors.ink,
+    borderColor: colors.surface,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 13,
+    fontSize: 16,
+    marginTop: 6,
+  },
+  searchContainer: {
+    borderColor: colors.surface,
+    paddingVertical: 8,
+    marginVertical: 16,
+  },
+  label: { color: colors.ink, fontSize: 14, fontWeight: "700", marginTop: 14 },
+  error: { color: colors.error, fontSize: 12, marginTop: 4 },
+});

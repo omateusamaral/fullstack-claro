@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Gerenciador de tarefas",
+    "slug": "claro-tasks",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f8fafc"
+      }
+    },
+    "plugins": ["expo-status-bar"]
+  }
+}
